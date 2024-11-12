@@ -1,6 +1,6 @@
 package template
 
-import "xerus/internal/component"
+import "neighbourhood-search/internal/component"
 
 
 templ Base(title string) {
@@ -11,14 +11,66 @@ templ Base(title string) {
             <script src="https://unpkg.com/htmx.org@1.9.11"></script>
             <link rel="stylesheet" href="/static/css/output.css"></link>
             <title>{title}</title>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+            <script src="/static/dist/app.js"></script>
         </head>
-            @component.Banner()
         <body>
             <main class="p-6 grid gap-4">
                 { children... }
             </main>
         </body>
     </html>
+}
+
+templ SubmitButton(input string) {
+  if input == "" {
+    <button type="submit" class="btn btn-primary" id="submit-button">{`Submit enabled. input: ${input}`}</button>
+  } else {
+    <button type="submit" class="btn btn-primary" id="submit-button" disabled>{`Submit disabled. input: ${input}`}</button>
+  }
+}
+
+templ TestString(input string) {
+  <div>{input}</div>
+}
+
+templ AddressInput() {
+  <form hx-post="/addresses" id="example-form" class="form-control w-full max-w-xs">
+    <div class="label">
+      <span class="label-text">Enter an address in Greater Victoria:</span>
+    </div>
+    <div class="flex flex-row gap-x-4 w-[800px]">
+      // <input type="text" placeholder="123 Main Street, A0A 0A0" class="input input-bordered w-full max-w-xs" oninput="if(this.value != 'foo') {
+      //               this.setCustomValidity('Please enter the value foo') // set the validation error
+      //           }"/>
+      // <button type="submit" class="btn btn-primary">Submit</button>
+      <input
+        type="text"
+        placeholder="123 Main Street, A0A 0A0"
+        class="input input-bordered w-full max-w-xs"
+        hx-post="/check-validity"
+        hx-target="#submit-button"
+      />
+
+      @SubmitButton("")
+        // <button
+        //   hx-get="/get-message"
+        //   hx-target="#message-area"
+        //   hx-swap="innerHTML">
+        //   Get Message
+        // </button>
+
+        // <!-- Content will be swapped in here -->
+        // <div id="message-area">
+        //   Click the button to see a new message!
+        // </div>
+    </div>
+  </form>
+}
+
+templ Map() {
+  <div id="map"></div>
 }
 
 
@@ -29,5 +81,6 @@ templ Home(title string) {
     @Base(title) {
         @component.TextAndTitle("I'm a Component!", "I am included as a content item in the Base Template!")
 		@component.TextAndTitle("I'm another Component!", "I am also included in the Base Template!")
+    @AddressInput()
     }
 }
