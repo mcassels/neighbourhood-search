@@ -15,7 +15,7 @@ import (
 
 func CheckValidityHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("CheckValidityHandler")
-	fmt.Println(r.FormValue("text"))
+	fmt.Println(r.Form)
 	template.SubmitButton(r.FormValue("text")).Render(context.Background(), w)
 	// middleware.Chain(w, r, template.TestString(("new inner html")))
 }
@@ -40,6 +40,18 @@ func main() {
 	mux.HandleFunc("GET /static/", view.ServeStaticFiles)
 	mux.HandleFunc("POST /check-validity", CheckValidityHandler)
 	mux.HandleFunc("GET /get-message", GetMessagesHandler)
+	mux.HandleFunc("POST /check-input", func(w http.ResponseWriter, r *http.Request) {
+		text := r.FormValue("text")
+		if text != "" {
+			w.Write([]byte(`<button id="submit-button" type="submit" class="btn btn-primary">Submit</button>`))
+		} else {
+			w.Write([]byte(`<button id="submit-button" type="submit" class="btn btn-primary" disabled>Submit</button>`))
+		}
+	})
+	http.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
+		// Process the form submission
+		w.Write([]byte("Form submitted!"))
+	})
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
