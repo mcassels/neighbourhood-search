@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"neighbourhood-search/internal/backend"
 	"neighbourhood-search/internal/generate"
 	"neighbourhood-search/internal/middleware"
 	"neighbourhood-search/internal/template"
@@ -38,6 +39,11 @@ func main() {
 	mux := http.NewServeMux()
 
 	var addresses = make([]types.AddressResult, 0)
+	googleMapsAPIKey := os.Getenv("GOOGLE_MAPS_KEY")
+	if googleMapsAPIKey == "" {
+		fmt.Println("GOOGLE_MAPS_KEY is not set")
+		return
+	}
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -58,11 +64,14 @@ func main() {
 			Neighbourhood: "this is a test",
 		}
 		// addresses = append(addresses, newAddress)
+		latlng := backend.Geocode(googleMapsAPIKey, newAddress.Address)
+		fmt.Println(latlng)
 		middleware.Chain(w, r, template.LoadingRow(newAddress.Address))
 	})
 
-	fmt.Printf("server is running on port %s\n", os.Getenv("PORT"))
-	err = http.ListenAndServe(":"+os.Getenv("PORT"), mux)
+	port := os.Getenv("PORT")
+	fmt.Printf("server is running on port %s\n", port)
+	err = http.ListenAndServe(":"+port, mux)
 	if err != nil {
 		fmt.Println(err)
 	}
