@@ -3,7 +3,7 @@
 </main></body></html>
 <button type=\"submit\" class=\"btn btn-primary\" id=\"submit-button\" disabled>Submit</button>
 <button type=\"submit\" class=\"btn btn-primary\" id=\"submit-button\">Submit</button>
-<form hx-post=\"/submit\" hx-target=\"#address-table\" hx-swap=\"beforeend\" class=\"flex gap-x-4\"><input type=\"text\" id=\"text-input\" name=\"text\" class=\"input input-bordered w-full max-w-xs\" hx-post=\"/check-input\" hx-trigger=\"keyup changed delay:200ms\" hx-target=\"#submit-button\" hx-swap=\"outerHTML\" placeholder=\"123 Main St\">
+<form hx-post=\"/submit\" hx-target=\"#address-table\" hx-swap=\"beforeend\" class=\"flex gap-x-4\" hx-on=\"htmx:afterRequest: if (event.detail.target.id === &#39;address-table&#39;) { this.reset(); document.getElementById(&#39;submit-button&#39;).disabled=true;}\"><input type=\"text\" id=\"text-input\" name=\"text\" class=\"input input-bordered w-full max-w-xs\" hx-post=\"/check-input\" hx-trigger=\"keyup changed delay:200ms\" hx-target=\"#submit-button\" hx-swap=\"outerHTML\" placeholder=\"123 Main St\">
 </form>
 <tr><th>
 </th><td id=\"

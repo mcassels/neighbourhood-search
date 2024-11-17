@@ -164,7 +164,7 @@ func AddressRow(address types.AddressResult) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(address.Address)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 56, Col: 24}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 62, Col: 24}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -177,7 +177,7 @@ func AddressRow(address types.AddressResult) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(address.Address)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 57, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 63, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -190,7 +190,7 @@ func AddressRow(address types.AddressResult) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(address.Neighbourhood)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 57, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 63, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -232,7 +232,7 @@ func LoadingRow(address string) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(address)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 64, Col: 14}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/template/template.templ`, Line: 70, Col: 14}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {

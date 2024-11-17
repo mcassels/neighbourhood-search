@@ -35,7 +35,13 @@ templ SubmitButton(input string) {
 }
 
 templ AddressInput() {
-      <form hx-post="/submit" hx-target="#address-table" hx-swap="beforeend" class="flex gap-x-4">
+      <form
+        hx-post="/submit"
+        hx-target="#address-table"
+        hx-swap="beforeend"
+        class="flex gap-x-4"
+        hx-on="htmx:afterRequest: if (event.detail.target.id === 'address-table') { this.reset(); document.getElementById('submit-button').disabled=true;}"
+      >
         <input
             type="text"
             id="text-input"
