@@ -57,8 +57,8 @@ func main() {
 			Address:       r.FormValue("text"),
 			Neighbourhood: "this is a test",
 		}
-		addresses = append(addresses, newAddress)
-		middleware.Chain(w, r, template.Home("Neighbourhood Finder", addresses))
+		// addresses = append(addresses, newAddress)
+		middleware.Chain(w, r, template.LoadingRow(newAddress.Address))
 	})
 
 	fmt.Printf("server is running on port %s\n", os.Getenv("PORT"))
