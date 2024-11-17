@@ -38,17 +38,10 @@ func main() {
 
 	mux.HandleFunc("GET /favicon.ico", view.ServeFavicon)
 	mux.HandleFunc("GET /static/", view.ServeStaticFiles)
-	mux.HandleFunc("POST /check-validity", CheckValidityHandler)
-	mux.HandleFunc("GET /get-message", GetMessagesHandler)
 	mux.HandleFunc("POST /check-input", func(w http.ResponseWriter, r *http.Request) {
-		text := r.FormValue("text")
-		if text != "" {
-			w.Write([]byte(`<button id="submit-button" type="submit" class="btn btn-primary">Submit</button>`))
-		} else {
-			w.Write([]byte(`<button id="submit-button" type="submit" class="btn btn-primary" disabled>Submit</button>`))
-		}
+		middleware.Chain(w, r, template.SubmitButton(r.FormValue("text")))
 	})
-	http.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("POST /submit", func(w http.ResponseWriter, r *http.Request) {
 		// Process the form submission
 		w.Write([]byte("Form submitted!"))
 	})

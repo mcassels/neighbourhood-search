@@ -1,6 +1,8 @@
 package template
 
-import "neighbourhood-search/internal/component"
+import (
+  "neighbourhood-search/internal/component"
+)
 
 
 templ Base(title string) {
@@ -25,61 +27,14 @@ templ Base(title string) {
 
 templ SubmitButton(input string) {
   if input == "" {
-    <button type="submit" class="btn btn-primary" id="submit-button">Submit disabled</button>
+    <button type="submit" class="btn btn-primary" id="submit-button" disabled>Submit</button>
   } else {
-    <button type="submit" class="btn btn-primary" id="submit-button" disabled>Submit enabled</button>
+    <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
   }
 }
 
-templ TestString(input string) {
-  <div>{input}</div>
-}
-
 templ AddressInput() {
-  <form hx-post="/addresses" id="example-form" class="form-control w-full max-w-xs">
-    <div class="label">
-      <span class="label-text">Enter an address in Greater Victoria:</span>
-    </div>
-    <div class="flex flex-row gap-x-4 w-[800px]">
-      // <input type="text" placeholder="123 Main Street, A0A 0A0" class="input input-bordered w-full max-w-xs" oninput="if(this.value != 'foo') {
-      //               this.setCustomValidity('Please enter the value foo') // set the validation error
-      //           }"/>
-      // <button type="submit" class="btn btn-primary">Submit</button>
-        //       hx-post="/check-validity"
-        // hx-target="#submit-button"
-      <input
-        type="text"
-        placeholder="123 Main Street, A0A 0A0"
-        class="input input-bordered w-full max-w-xs"
-        hx-on:htmx:validation:validate="if(this.value != 'foo') {
-                this.setCustomValidity('Please enter the value foo') // set the validation error
-                htmx.find('#example-form').reportValidity()          // report the issue
-            }"
-      />
-
-      // @SubmitButton()
-      <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
-        // <button
-        //   hx-get="/get-message"
-        //   hx-target="#message-area"
-        //   hx-swap="innerHTML">
-        //   Get Message
-        // </button>
-
-        // <!-- Content will be swapped in here -->
-        // <div id="message-area">
-        //   Click the button to see a new message!
-        // </div>
-    </div>
-  </form>
-}
-
-templ Map() {
-  <div id="map"></div>
-}
-
-templ AddressInputTest() {
-      <form method="post" action="/submit">
+      <form method="post" action="/submit" class="flex gap-x-4">
         <input
             type="text"
             id="text-input"
@@ -90,7 +45,7 @@ templ AddressInputTest() {
             hx-target="#submit-button"
             hx-swap="outerHTML"
         />
-        <button id="submit-button" class="btn btn-primary" type="submit" disabled>Submit</button>
+        @SubmitButton("")
     </form>
 }
 
@@ -100,8 +55,7 @@ templ AddressInputTest() {
 // middleware!(ParseForm)
 templ Home(title string) {
     @Base(title) {
-        @component.TextAndTitle("I'm a Component!", "I am included as a content item in the Base Template!")
-		@component.TextAndTitle("I'm another Component!", "I am also included in the Base Template!")
-    @AddressInputTest()
+    @component.TextAndTitle("Neighbourhood finder", "Enter an address in Greater Victoria")
+    @AddressInput()
     }
 }
