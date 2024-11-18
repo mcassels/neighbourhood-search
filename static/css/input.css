@@ -5,3 +5,13 @@
 .btn-primary {
   transition-timing-function: unset;
 }
+
+.my-indicator{
+  display:none;
+}
+.htmx-request .my-indicator{
+  display:inline;
+}
+.htmx-request.my-indicator{
+  display:inline;
+}

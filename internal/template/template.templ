@@ -41,6 +41,7 @@ templ AddressInput() {
         hx-swap="beforeend"
         class="flex gap-x-4"
         hx-on="htmx:afterRequest: if (event.detail.target.id === 'address-table') { this.reset(); document.getElementById('submit-button').disabled=true;}"
+        hx-indicator="#loading-row"
       >
         <input
             type="text"
@@ -52,27 +53,29 @@ templ AddressInput() {
             hx-target="#submit-button"
             hx-swap="outerHTML"
             placeholder="123 Main St"
+            hx-indicator="none"
         />
         @SubmitButton("")
     </form>
 }
 
 templ AddressRow(address types.AddressResult) {
-  <tr>
-    <th>{address.Address}</th>
-    <td id={address.Address}>{address.Neighbourhood}</td>
+  <tr id={address.Address}>
+    <td>
+      {address.Address}
+    </td>
+    <td>
+      {address.LatLng}
+    </td>
+    <td>
+      {address.Neighbourhood}
+    </td>
   </tr>
 }
 
-templ LoadingRow(address string) {
-  <tr id="loading-row">
-    <td>
-      {address}
-    </td>
-    <td>
-      <span class="loading loading-dots loading-md"></span>
-    </td>
-    <td>
+templ LoadingRow() {
+  <tr id="loading-row" class="my-indicator">
+    <td colspan="3">
       <span class="loading loading-dots loading-md"></span>
     </td>
   </tr>
@@ -93,6 +96,7 @@ templ AddressTable(addresses []types.AddressResult) {
       for _, address := range addresses {
         @AddressRow(address)
       }
+      @LoadingRow()
     </tbody>
   </table>
 </div>
