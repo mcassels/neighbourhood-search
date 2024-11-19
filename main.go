@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"neighbourhood-search/internal/backend"
 	"neighbourhood-search/internal/generate"
@@ -13,6 +14,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"googlemaps.github.io/maps"
 )
 
 func CheckValidityHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,15 +63,20 @@ func main() {
 	mux.HandleFunc("POST /submit", func(w http.ResponseWriter, r *http.Request) {
 		address := r.FormValue("text")
 
-		latlng := ""
+		var latlng maps.LatLng
+		latlng = maps.LatLng{}
 		for _, a := range addresses {
 			if a.Address == address {
 				latlng = a.LatLng
 				break
 			}
 		}
-		if latlng == "" {
-			latlng = backend.Geocode(googleMapsAPIKey, address)
+		if latlng.Lat == 0 && latlng.Lng == 0 {
+			latlng, err = backend.Geocode(googleMapsAPIKey, address)
+			if err != nil {
+				middleware.Chain(w, r, template.UnknownAddressRow(address))
+				return
+			}
 		}
 		fmt.Println(latlng)
 		newAddress := types.AddressResult{
@@ -79,6 +86,18 @@ func main() {
 		}
 
 		addresses = append(addresses, newAddress)
+		trigger := map[string]interface{}{
+			"add-marker": map[string]float64{
+				"lat": latlng.Lat,
+				"lng": latlng.Lng,
+			},
+		}
+		triggerJSON, err := json.Marshal(trigger)
+		if err != nil {
+			http.Error(w, "Failed to set header", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("hx-trigger", string(triggerJSON))
 		middleware.Chain(w, r, template.AddressRow(newAddress))
 	})
 

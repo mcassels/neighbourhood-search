@@ -8,7 +8,7 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-func Geocode(apiKey string, address string) string {
+func Geocode(apiKey string, address string) (maps.LatLng, error) {
 	c, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
 		log.Fatalf("fatal error: %s", err)
@@ -35,7 +35,7 @@ func Geocode(apiKey string, address string) string {
 		log.Fatalf("fatal error: %s", err)
 	}
 	if len(results) == 0 {
-		return "No results found"
+		return maps.LatLng{}, fmt.Errorf("no results found for %s", address)
 	}
-	return results[0].Geometry.Location.String()
+	return results[0].Geometry.Location, nil
 }
