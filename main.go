@@ -61,7 +61,16 @@ func main() {
 	mux.HandleFunc("POST /submit", func(w http.ResponseWriter, r *http.Request) {
 		address := r.FormValue("text")
 
-		latlng := backend.Geocode(googleMapsAPIKey, address)
+		latlng := ""
+		for _, a := range addresses {
+			if a.Address == address {
+				latlng = a.LatLng
+				break
+			}
+		}
+		if latlng == "" {
+			latlng = backend.Geocode(googleMapsAPIKey, address)
+		}
 		fmt.Println(latlng)
 		newAddress := types.AddressResult{
 			Address:       r.FormValue("text"),
@@ -69,7 +78,6 @@ func main() {
 			Neighbourhood: "this is a test",
 		}
 
-		// TODO: use addresses as a cache and check for address before geocoding
 		addresses = append(addresses, newAddress)
 		middleware.Chain(w, r, template.AddressRow(newAddress))
 	})

@@ -2,6 +2,7 @@ package backend
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"googlemaps.github.io/maps"
@@ -28,6 +29,7 @@ func Geocode(apiKey string, address string) string {
 			},
 		},
 	}
+	fmt.Println("making request")
 	results, err := c.Geocode(context.Background(), r)
 	if err != nil {
 		log.Fatalf("fatal error: %s", err)
